@@ -1,4 +1,9 @@
-FROM golang:latest
+FROM alpine:3.18 as base
+FROM base
+
+RUN apk add --no-cache git make musl-dev go
+
+ENV port=8082
 
 WORKDIR /app
 ADD . /app/
@@ -8,13 +13,9 @@ RUN go mod tidy
 ARG OS
 ARG ARCH
 RUN env GOOS=${OS} GOARCH=${ARCH} go build -o docker_with_golang ./cmd/main.go
-# -------------------------------------
 
-FROM alpine:3.18
 
-WORKDIR /app
-COPY --from=builder /app/docker_with_golang .
-
+EXPOSE ${port}
 CMD ["./docker_with_golang"]
 
 
