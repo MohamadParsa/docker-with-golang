@@ -7,7 +7,7 @@ RUN go mod tidy
 
 ARG OS
 ARG ARCH
-RUN env GOOS=${OS} GOARCH=${ARCH} go build -o docker_with_golang ./cmd/main.go
+RUN env GOOS=${OS} GOARCH=${ARCH} CGO_ENABLED=0 go build -o docker_with_golang ./cmd/main.go
 # -------------------------------------
 
 FROM alpine:3.18
